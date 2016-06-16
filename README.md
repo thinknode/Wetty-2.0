@@ -1,4 +1,4 @@
-Wetty = Web + tty
+Wetty = Web + tty + options
 -----------------
 
 Terminal over HTTP and HTTPS. Wetty is an alternative to
@@ -6,10 +6,11 @@ ajaxterm/anyterm but much better than them because wetty uses ChromeOS'
 terminal emulator (hterm) which is a full fledged implementation of
 terminal emulation written entirely in Javascript. Also it uses
 websockets instead of Ajax and hence better response time.
+Provide options on connection to the server in order to change things 
+such as authentication method.
 
 hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
 
-![Wetty](/terminal.png?raw=true)
 
 Install
 -------
@@ -47,7 +48,7 @@ create a self signed certificate using this command:
 
 And then run:
 
-    node app.js --sslkey key.pem --sslcert cert.pem -p 3000
+    node app.js --sslkey key.pem --sslcert cert.pem -p 3000 
 
 Again, if you run it as root it will launch `/bin/login`, else it will
 launch SSH to `localhost` or a specified host as explained above.
