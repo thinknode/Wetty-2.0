@@ -21,6 +21,12 @@ Install
 
 *  `npm install`
 
+
+Client Side Options:
+-------------------
+
+Options are passed to the server by...
+
 Run on HTTP:
 -----------
 
