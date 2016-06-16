@@ -25,7 +25,7 @@ Install
 Client Side Options:
 -------------------
 
-Options are passed to the server by...
+Options are passed to the server by listening to connection events 
 
 Run on HTTP:
 -----------
