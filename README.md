@@ -1,7 +1,7 @@
 Wetty = Web + tty + query params
 -----------------
 
-This is a fork of the Wetty project created by [https://github.com/krishnasrinivas/wetty](krishnasrinivas/wetty) 
+This is a fork of the Wetty project created by [krishnasrinivas/wetty](https://github.com/krishnasrinivas/wetty) 
 which contains enhancements to support query parameters on the socket.io connection to the server. 
 This is useful for connecting with a publickey where the client defines the private RSA/DSA key that the 
 server is supposed to use to ssh to the specified host. Another notable change to this Wetty project from the original
@@ -9,7 +9,7 @@ is the ability to invoke the socket.io connection to the server via the Wetty co
 where the mere inclusion of the Wetty client source code would invoke a connection to the server.
 
 This documentation is a subset of the original Wetty documentation that I have modified in accordance with the 
-new functionality. If you need more detailed docs I suggest that you visit origin Wetty [https://github.com/krishnasrinivas/wetty](page)
+new functionality. If you need more detailed docs I suggest that you visit the original Wetty [page](https://github.com/krishnasrinivas/wetty)
 
 Install
 -------
