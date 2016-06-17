@@ -27,6 +27,7 @@ connection class called Wetty. The Wetty class is attached to the window object 
 to in order to invoke it at any time. The Wetty constructor accepts a single argument of type object or undefined. 
 
 Argument properties:
+
 1. (string) connectionType (default:ssh) - should be ssh or login
 
 2. (object) ssh (default:none) - contains information about private keys and user being connected
