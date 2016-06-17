@@ -28,9 +28,13 @@ to in order to invoke it at any time. The Wetty constructor accepts a single arg
 
 Argument properties:
 1. (string) connectionType (default:ssh) - should be ssh or login
+
 2. (object) ssh (default:none) - contains information about private keys and user being connected
+
 3. (string) ssh.auth (default:password) - should be publickey or password
+
 4. (Buffer) ssh.identityRSA (default:none)- A buffer of the private RSA/DSA key that will be used to authenticate access to the server
+
 5. (string) ssh.user (default:none) - The user which will be sshing into the server
 
 Example:
