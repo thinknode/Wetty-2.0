@@ -101,6 +101,8 @@ var io = server(httpserv, {path: '/wetty/socket.io'});
 io.use(function (socket, next) {
     if (socket.handshake.query.connectionType) {
         socket.connectionType = socket.handshake.query.connectionType;
+    } else {
+        socket.connectionType = opts.connectionType;
     }
     if (socket.handshake.query.ssh) {
         if (!socket.sshOpts) {
