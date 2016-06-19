@@ -5,7 +5,8 @@ module.exports = function (grunt) {
             customTasksDir: 'tasks',
             staticMappings: {
                 configureProxies: 'grunt-connect-proxy',
-                express: 'grunt-express-server'
+                express: 'grunt-express-server',
+                gitclone: 'grunt-git'
             }
         }
     });

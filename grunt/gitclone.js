@@ -5,4 +5,5 @@ module.exports = {
             repository: 'https://chromium.googlesource.com/apps/libapps'
         }
     }
+
 };
