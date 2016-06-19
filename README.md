@@ -26,7 +26,7 @@ Client Side:
 
 The Wetty server will respond with client side javascript source code which will contain the client side
 connection class called Wetty. The Wetty class is attached to the window object in your browser which you can gain access
-to in order to invoke it at any time. The Wetty constructor accepts a single argument of type object or undefined. 
+to in order to invoke it at any time. The Wetty constructor accepts a single argument of type object or undefined.
 
 Argument properties:
 
@@ -53,10 +53,20 @@ Executed this code once Wetty client source code has been injected to your page.
     });`
 
 
+Unlike the client side code in the original project, the Wetty client side source code must be invoked in order to initiate connections.
+This offers a robust way to integrate wetty into client side frameworks or AMD loaders using shims.
+
+Run in Development mode:
+------------------------
+    `grunt start`
+
+The development server will live reload on any changes to the source code. 
+The development port is 3000.
+
 Run on HTTP:
 -----------
 
-    grunt start
+    `node app.js -p 3000`
 
 If you run it as root it will launch `/bin/login` (where you can specify
 the user name), unless you explicitly request an ssh session via query parameters on connection to the server.
@@ -82,4 +92,4 @@ create a self signed certificate using this command:
 
 And then run:
 
-    grunt start --sslkey key.pem --sslcert cert.pem
+    node app.js -p 3000 --sslkey key.pem --sslcert cert.pem
