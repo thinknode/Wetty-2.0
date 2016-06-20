@@ -9,7 +9,7 @@ function Wetty(argv) {
         for (var k in argv) {
             var v;
             if (typeof argv[k] === "object" || typeof argv[k] === "array") {
-                v = JSON.stringify(argv[k]);
+                v = encodeURIComponent(JSON.stringify(argv[k]));
             } else {
                 v = argv[k];
             }

@@ -117,12 +117,14 @@ io.use(function (socket, next) {
             throw new Error("No identityRSA or user provided");
         } else {
             socket.sshOpts.auth = sshQueryOpts.auth;
-            socket.sshOpts.identityRSA = new Buffer(sshQueryOpts.identityRSA).toString();
+            var buf = new Buffer(sshQueryOpts.identityRSA, "base64");
+            socket.sshOpts.identityRSA = buf.toString("utf8");
             socket.sshOpts.user = sshQueryOpts.user;
         }
     }
 
     next();
+
 });
 io.on('connection', function (socket) {
     var sshuser = '';
@@ -158,13 +160,13 @@ io.on('connection', function (socket) {
             sshArgs.push("-i");
             sshArgs.push(identityFile);
         }
-        
+
         sshArgs.push("-p");
         sshArgs.push(socket.sshOpts.port);
         sshArgs.push("-o");
         sshArgs.push("PreferredAuthentications=" + socket.sshOpts.auth);
         sshArgs.push(sshuser + socket.sshOpts.host);
-        
+
         term = pty.spawn('ssh', sshArgs, {
             name: 'xterm-256color',
             cols: 80,
@@ -172,12 +174,15 @@ io.on('connection', function (socket) {
         });
         term.connectionUUID = connectionUUID;
         if (socket.sshOpts.auth === "publickey" && socket.identityDir) {
-            // Delete the private key from the server since the ssh session has been created
-//            exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
-//                if (err) {
-//                    throw err;
-//                }
-//            });
+            // Delete the private key from the server 1 second after the session has been created
+            setTimeout(function () {
+                exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
+                    if (err) {
+                        throw err;
+                    }
+                });
+            }, 1000);
+
         }
     }
 
@@ -204,7 +209,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         term.end();
     });
-    socket.on("error", function(data){
+    socket.on("error", function (data) {
         console.log("error", data);
     });
 });
