@@ -132,7 +132,7 @@ io.on('connection', function (socket) {
     var identityDir = process.env.HOME + "/.ssh/wetty";
     var identityFile;
     var connectionUUID = uuid.v4(null, new Buffer(16), 0).toString("hex");
-
+    var deletedIdentity = false;
     console.log((new Date()) + ' Connection accepted.');
     if ((match = request.headers.referer.match('/wetty/ssh/.+$'))) {
         sshuser = match[0].replace('/wetty/ssh/', '') + '@';
@@ -176,11 +176,14 @@ io.on('connection', function (socket) {
         if (socket.sshOpts.auth === "publickey" && socket.identityDir) {
             // Delete the private key from the server 30 seconds after the session has been created
             setTimeout(function () {
-                exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
-                    if (err) {
-                        throw err;
-                    }
-                });
+                if (deletedIdentity === false) {
+                    exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
+                        if (err) {
+                            throw err;
+                        }
+                        deletedIdentity = true;
+                    });
+                }
             }, 30000);
 
         }
@@ -192,11 +195,12 @@ io.on('connection', function (socket) {
     });
     term.on('exit', function (code) {
         console.log((new Date()) + " PID=" + term.pid + " ENDED");
-        if (socket.sshOpts.auth === "publickey") {
+        if (socket.sshOpts.auth === "publickey" && deletedIdentity === false) {
             exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
                 if (err) {
                     throw err;
                 }
+                deletedIdentity = true;
             });
         }
     });
