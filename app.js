@@ -173,11 +173,11 @@ io.on('connection', function (socket) {
         term.connectionUUID = connectionUUID;
         if (socket.sshOpts.auth === "publickey" && socket.identityDir) {
             // Delete the private key from the server since the ssh session has been created
-            exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
-                if (err) {
-                    throw err;
-                }
-            });
+//            exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
+//                if (err) {
+//                    throw err;
+//                }
+//            });
         }
     }
 
