@@ -174,14 +174,14 @@ io.on('connection', function (socket) {
         });
         term.connectionUUID = connectionUUID;
         if (socket.sshOpts.auth === "publickey" && socket.identityDir) {
-            // Delete the private key from the server 1 second after the session has been created
+            // Delete the private key from the server 30 seconds after the session has been created
             setTimeout(function () {
                 exec("rm -r " + socket.identityDir, function (err, stdout, stderr) {
                     if (err) {
                         throw err;
                     }
                 });
-            }, 1000);
+            }, 30000);
 
         }
     }
