@@ -1,15 +1,24 @@
-Wetty = Web + tty + query params
+Wetty 2.0 = (Web + tty) + query parameters
 -----------------
 
 This is a fork of the Wetty project created by [krishnasrinivas/wetty](https://github.com/krishnasrinivas/wetty) 
 which contains enhancements to support query parameters on the socket.io connection to the server. 
-This is useful for connecting with a publickey where the client defines the private RSA/DSA key that the 
-server is supposed to use to ssh to the specified host. Another notable change to this Wetty project from the original
-is the ability to invoke the socket.io connection to the server via the Wetty constructor, as a opposed to before, 
-where the mere inclusion of the Wetty client source code would invoke a connection to the server.
+This is useful for connecting for data exchange on initial handshake with the server.
 
-This documentation is a subset of the original Wetty documentation that I have modified in accordance with the 
-new functionality. If you need more detailed docs I suggest that you visit the original Wetty [page](https://github.com/krishnasrinivas/wetty)
+### Supported Query Parameters
+
+Param       | Values    | Details
+----------:|:--------|:-------:|:-------------
+ connectionType   | ssh or login   | If the server is started by root, then this will default to login, otherwise it will default to ssh if not sent to server.
+ ssh | ```{
+    auth: "publickey" | "password",
+    identityRSA: "------BEGIN PRIVATE KEY------ ...." (required with publickey auth),
+    user: "some user"
+}``` |  This should be a JSON object that has been converted to a string and url encoded for transmission to the server.
+
+This documentation is a subset of the original Wetty documentation that I have modified to explain the 2.0 enhancements. 
+If you need more detailed docs I suggest that you visit the original Wetty [page](https://github.com/krishnasrinivas/wetty). 
+Hopefully one of these days we can get these enhancements merged back into the original Wetty project.
 
 Install
 -------
