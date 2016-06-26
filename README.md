@@ -1,33 +1,83 @@
-Wetty = Web + tty
+Wetty 2.0 = (Web + tty) + query parameters
 -----------------
 
-Terminal over HTTP and HTTPS. Wetty is an alternative to
-ajaxterm/anyterm but much better than them because wetty uses ChromeOS'
-terminal emulator (hterm) which is a full fledged implementation of
-terminal emulation written entirely in Javascript. Also it uses
-websockets instead of Ajax and hence better response time.
+This is a fork of the Wetty project created by [krishnasrinivas/wetty](https://github.com/krishnasrinivas/wetty) 
+which contains enhancements to support query parameters on the socket.io connection to the server. 
+This is useful for connecting for data exchange on initial handshake with the server.
 
-hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
+### Supported Query Parameters
 
-![Wetty](/terminal.png?raw=true)
+Param       | Values    | Details
+----------:|:--------|:-------:|:-------------
+ connectionType   | ssh or login   | If the server is started by root, then this will default to login, otherwise it will default to ssh if not sent to server.
+ ssh |  ``` { auth: "publickey | password", identityRSA: "------BEGIN PRIVATE KEY------ ...." (required with publickey auth), user: "some user } ```  |  This should be a JSON object that has been converted to a string and url encoded for transmission to the server.
+
+This documentation is a subset of the original Wetty documentation that I have modified to explain the 2.0 enhancements. 
+If you need more detailed docs I suggest that you visit the original Wetty [page](https://github.com/krishnasrinivas/wetty). 
+Hopefully one of these days we can get these enhancements merged back into the original Wetty project.
 
 Install
 -------
 
-*  `git clone https://github.com/krishnasrinivas/wetty`
+*  `git clone https://github.com/thinknode/wetty`
 
 *  `cd wetty`
 
 *  `npm install`
 
+
+Client Side:
+-------------------
+
+The Wetty server will respond with client side javascript source code which will contain the client side
+connection class called Wetty. The Wetty class is attached to the window object in your browser which you can gain access
+to in order to invoke it at any time. The Wetty constructor accepts a single argument of type object or undefined.
+
+Argument properties:
+
+1. (string) connectionType (default:ssh) - should be ssh or login
+
+2. (object) ssh (default:none) - contains information about private keys and user being connected
+
+3. (string) ssh.auth (default:password) - should be publickey or password
+
+4. (Buffer) ssh.identityRSA (default:none)- A buffer of the private RSA/DSA key that will be used to authenticate access to the server
+
+5. (string) ssh.user (default:none) - The user which will be sshing into the server
+
+Example:
+Executed this code once Wetty client source code has been injected to your page. 
+
+`new window.Wetty({
+        ssh: {
+            auth: "publickey",
+            identityRSA: new Buffer("private key rsa"),
+            user: "myuser"
+        },
+        connectionType: "ssh"
+    });`
+
+
+Unlike the client side code in the original project, the Wetty client side source code must be invoked in order to initiate connections.
+This offers a robust way to integrate wetty into client side frameworks or AMD loaders using shims.
+
+Run in Development mode:
+------------------------
+    `grunt start`
+
+The development server will live reload on any changes to the source code. 
+The development port is 3000.
+
 Run on HTTP:
 -----------
 
-    node app.js -p 3000
+    `node app.js -p 3000`
 
 If you run it as root it will launch `/bin/login` (where you can specify
-the user name), else it will launch `ssh` and connect by default to
-`localhost`.
+the user name), unless you explicitly request an ssh session via query parameters on connection to the server.
+
+Every other user will default to use an ssh session, though you can override this behavior once again with query parameters.
+
 
 If instead you wish to connect to a remote host you can specify the
 `--sshhost` option, the SSH port using the `--sshport` option and the
@@ -47,65 +97,4 @@ create a self signed certificate using this command:
 
 And then run:
 
-    node app.js --sslkey key.pem --sslcert cert.pem -p 3000
-
-Again, if you run it as root it will launch `/bin/login`, else it will
-launch SSH to `localhost` or a specified host as explained above.
-
-Run wetty behind nginx:
-----------------------
-
-Put the following configuration in nginx's conf:
-
-    location /wetty {
-	    proxy_pass http://127.0.0.1:3000/wetty;
-	    proxy_http_version 1.1;
-	    proxy_set_header Upgrade $http_upgrade;
-	    proxy_set_header Connection "upgrade";
-	    proxy_read_timeout 43200000;
-
-	    proxy_set_header X-Real-IP $remote_addr;
-	    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	    proxy_set_header Host $http_host;
-	    proxy_set_header X-NginX-Proxy true;
-    }
-
-If you are running `app.js` as `root` and have an Nginx proxy you have to use:
-
-    http://yourserver.com/wetty
-
-Else if you are running `app.js` as a regular user you have to use:
-
-    http://yourserver.com/wetty/ssh/<username>
-
-**Note that if your Nginx is configured for HTTPS you should run wetty without SSL.**
-
-Dockerized Version
-------------------
-
-This repo includes a Dockerfile you can use to run a Dockerized version of wetty.  You can run
-whatever you want!
-
-Just do:
-
-```
-    docker run --name term -p 3000 -dt nathanleclaire/wetty
-```
-
-Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`).  
-The username is `term` and the password is `term`.
-
-Run wetty as a service daemon
------------------------------
-
-Install wetty globally with -g option:
-
-```bash
-    $ sudo npm install wetty -g
-    $ sudo cp /usr/local/lib/node_modules/wetty/bin/wetty.conf /etc/init
-    $ sudo start wetty
-```
-
-This will start wetty on port 3000. If you want to change the port or redirect stdout/stderr you should change the last line in `wetty.conf` file, something like this:
-
-    exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
+    node app.js -p 3000 --sslkey key.pem --sslcert cert.pem
