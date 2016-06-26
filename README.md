@@ -10,9 +10,7 @@ This is useful for connecting for data exchange on initial handshake with the se
 Param       | Values    | Details
 ----------:|:--------|:-------:|:-------------
  connectionType   | ssh or login   | If the server is started by root, then this will default to login, otherwise it will default to ssh if not sent to server.
- ssh |  ```javascript 
-            { auth: "publickey | password", identityRSA: "------BEGIN PRIVATE KEY------ ...." (required with publickey auth), user: "some user }
-```  |  This should be a JSON object that has been converted to a string and url encoded for transmission to the server.
+ ssh |  ``` { auth: "publickey | password", identityRSA: "------BEGIN PRIVATE KEY------ ...." (required with publickey auth), user: "some user } ```  |  This should be a JSON object that has been converted to a string and url encoded for transmission to the server.
 
 This documentation is a subset of the original Wetty documentation that I have modified to explain the 2.0 enhancements. 
 If you need more detailed docs I suggest that you visit the original Wetty [page](https://github.com/krishnasrinivas/wetty). 
